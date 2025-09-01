@@ -31,7 +31,7 @@ This script automates the **entire end-to-end workflow** - from app creation to 
 - **Supports all 6 Databricks App types**: Streamlit (default), Gradio, Dash, Shiny, Flask, Node.js
 - **Automatically discovers** your existing Databricks resources
 - **Assigns resources** to the app (equivalent to UI dropdown selection + permissions + resource keys)
-- **Starts compute environment** for the application
+- **Starts the compute environment** for the application
 - **Deploys and starts** the complete application
 - **Provides a sample app** that tests all resource connections
 - **Outputs app URL and commands** for future sync and deployment
