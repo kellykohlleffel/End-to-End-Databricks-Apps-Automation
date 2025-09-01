@@ -97,7 +97,7 @@ DEFAULT_UC_TABLE=your-table-name
 These are loaded by the script at startup; some are required. The script will exit if `DATABRICKS_HOST` or `DATABRICKS_TOKEN` are missing. :contentReference[oaicite:1]{index=1}
 
 ### ✅ Required
-- **DATABRICKS_HOST** – your workspace URL (e.g., `https://adb-xxxx.azuredatabricks.net`)
+- **DATABRICKS_HOST** – your workspace URL (e.g., Azure: `https://adb-xxxx.azuredatabricks.net`, AWS: `<deployment-name>.cloud.databricks.com`, Google Cloud: `https://1234567890123456.7.gcp.databricks.com`)
 - **DATABRICKS_TOKEN** – PAT from **User Settings → Developer → Access tokens**
 - **SQL_HTTP_PATH** – copy from your SQL Warehouse connection details; if omitted, the app falls back to `"/sql/1.0/warehouses/${WAREHOUSE_ID}"` discovered at deploy time. :contentReference[oaicite:2]{index=2}
 - **SECRET_SCOPE** and **APP_SECRET_NAME** – should match the scope/key you configure in the script (see next section). The app reads the token via the assigned secret resource at runtime. :contentReference[oaicite:3]{index=3}
