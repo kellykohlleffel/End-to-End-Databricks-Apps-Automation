@@ -36,7 +36,7 @@ EXISTING_SECRET_KEY="your-databricks-token-secret"
 SECRET_RESOURCE_KEY="secret" 
 SECRET_PERMISSION="READ"
 
-# Your 8 default serving endpoints - using arrays instead of associative arrays
+# Your 8 default serving endpoints - using arrays
 declare -a ENDPOINT_KEYS ENDPOINT_NAMES ENDPOINT_PERMISSIONS
 ENDPOINT_KEYS[1]="serving-endpoint"
 ENDPOINT_NAMES[1]="databricks-claude-sonnet-4"
@@ -296,7 +296,7 @@ EOF
 done
 
 # ─────────────────────────────────────────────────────────────
-# Create app file based on selected type
+# Create app file based on selected data app type
 # ─────────────────────────────────────────────────────────────
 if [ ! -f "$APP_FILE" ]; then
     print_status "Creating $APP_FILE for $APP_TYPE..."

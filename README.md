@@ -76,7 +76,6 @@ DATABRICKS_HOST=your-databricks-host-here
 # Personal access token - generate from User Settings > Developer > Access tokens
 DATABRICKS_TOKEN=your-databricks-token-here
 
-# --- Fixed resources (optional overrides) ---
 # SQL warehouse ODBC path (kept same across apps) - get from SQL warehouse connection details
 SQL_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id-here
 
@@ -90,7 +89,24 @@ APP_SECRET_NAME=your-databricks-token-secret-name
 DEFAULT_UC_CATALOG=your-catalog-name
 DEFAULT_UC_SCHEMA=your-schema-name
 DEFAULT_UC_TABLE=your-table-name
+
 ```
+
+## Before You Run: Fill in `.env` (what to update)
+
+These are loaded by the script at startup; some are required. The script will exit if `DATABRICKS_HOST` or `DATABRICKS_TOKEN` are missing. :contentReference[oaicite:1]{index=1}
+
+### ✅ Required
+- **DATABRICKS_HOST** – your workspace URL (e.g., `https://adb-xxxx.azuredatabricks.net`)
+- **DATABRICKS_TOKEN** – PAT from **User Settings → Developer → Access tokens**
+- **SQL_HTTP_PATH** – copy from your SQL Warehouse connection details; if omitted, the app falls back to `"/sql/1.0/warehouses/${WAREHOUSE_ID}"` discovered at deploy time. :contentReference[oaicite:2]{index=2}
+- **SECRET_SCOPE** and **APP_SECRET_NAME** – should match the scope/key you configure in the script (see next section). The app reads the token via the assigned secret resource at runtime. :contentReference[oaicite:3]{index=3}
+
+### Optional: Defaults for interactive prompts
+- **DEFAULT_UC_CATALOG**, **DEFAULT_UC_SCHEMA**, **DEFAULT_UC_TABLE** – seeds for the prompts (you can override at runtime); align these with the script’s defaults to avoid surprises. :contentReference[oaicite:4]{index=4}
+
+> `.env` is already ignored by `.gitignore`, so you won’t commit credentials. :contentReference[oaicite:5]{index=5}
+
 
 ### Existing Databricks Resources
 The script expects these resources to already exist in your Databricks workspace:
@@ -112,6 +128,50 @@ The script expects these resources to already exist in your Databricks workspace
 - **Catalog**: Your Unity Catalog name
 - **Schema**: Your schema name
 - **Table**: Your table name
+
+## Before You Run: Update These in `create-databricks-app.sh`
+
+This script **assigns your existing resources** to the app via the bundle; it does not create them. Make sure the names here match resources that already exist in your workspace. :contentReference[oaicite:7]{index=7}
+
+### 1) SQL Warehouse (required)
+
+```bash
+EXISTING_WAREHOUSE_NAME="your-databricks-warehouse-name"
+# Permission used when assigning to the app:
+WAREHOUSE_PERMISSION="CAN_USE"
+```
+
+### 2) Secret scope and key (required)
+
+```bash
+EXISTING_SECRET_SCOPE="your-secret-scope-name"
+EXISTING_SECRET_KEY="your-databricks-token-secret"
+# Permission used when assigning to the app:
+SECRET_PERMISSION="READ"
+```
+The app reads `DATABRICKS_TOKEN` via this assigned secret (no plaintext token in files).
+
+### 3) Foundation model Serving Endpoints (customize to your workspace)
+
+```bash
+ENDPOINT_NAMES[1]="databricks-claude-sonnet-4"
+# ...
+ENDPOINT_NAMES[8]="databricks-gpt-oss-120b"
+```
+These are assigned to the app in the bundle with the specified permission.
+
+### 4) Unity Catalog prompt defaults (optional)
+
+```bash
+DEFAULT_UC_CATALOG="your-catalog-name"
+DEFAULT_UC_SCHEMA="your-schema-name"
+DEFAULT_UC_TABLE="your-table-name"
+```
+These flow into the generated app.yaml env for your app.
+
+### 5) SQL Warehouse HTTP path behavior (FYI)
+
+`app.yaml` sets `DATABRICKS_SQL_HTTP_PATH` to your `.env` value if present, otherwise it falls back to `"/sql/1.0/warehouses/${WAREHOUSE_ID}"` derived from the discovered warehouse.
 
 ## Usage
 
@@ -435,4 +495,4 @@ When the script completes successfully, you should see:
 
 ---
 
-**Ready to automate your Databricks app creation!** No more manual resource clicking - just run the script and add your custom app code.
+**Ready to automate your Databricks app creation and deployment!** No more manual resource clicking - just run the script and add your custom app code.
